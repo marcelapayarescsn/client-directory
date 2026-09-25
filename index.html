@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C-Suite Network · Client Directory</title>
+<meta name="description" content="Client directory prepared by Marcela Payares, C-Suite Network.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a; --surface:#141414; --surface-hover:#191919;
+    --line:#242424; --line-strong:#333333;
+    --ink:#f4f3f0; --ink-soft:#a6a49d; --ink-faint:#6c6a63;
+    --accent:#5b84ac; --accent-soft: rgba(91,132,172,0.14); --accent-line: rgba(91,132,172,0.4);
+    color-scheme: dark;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background: var(--bg); color: var(--ink);
+    font-family:'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  }
+  .wrap{ max-width: 980px; margin: 0 auto; padding: 0 20px 70px; }
+
+  .site-header{ border-bottom: 1px solid var(--line); padding: 34px 0 30px; margin-bottom: 44px; }
+  .brand{ display:flex; align-items:baseline; gap:2px; text-decoration:none; }
+  .brand .c{ font-weight:700; font-size: 22px; letter-spacing: 3px; color: var(--ink); }
+  .brand .n{ font-weight:300; font-size: 22px; letter-spacing: 3px; color: var(--ink-soft); margin-left:7px; }
+  .brand .tm{ font-size: 10px; color: var(--ink-faint); margin-left:3px; align-self:flex-start; }
+  .eyebrow{ font-size: 11.5px; letter-spacing: 2px; text-transform:uppercase; color: var(--accent); font-weight:600; margin: 22px 0 10px; }
+  h1{ font-weight: 300; font-size: clamp(24px, 4vw, 32px); line-height:1.2; margin: 0 0 10px; color: var(--ink); }
+  .sub{ color: var(--ink-soft); font-size: 13.5px; line-height:1.6; max-width: 60ch; margin:0 0 28px; }
+
+  .search-wrap{ position:relative; }
+  .search-box{
+    display:flex; align-items:center; gap:10px;
+    border: 1px solid var(--line-strong); background: var(--surface);
+    padding: 13px 16px; transition: border-color .15s ease;
+  }
+  .search-box:focus-within{ border-color: var(--accent); }
+  .search-box svg{ flex:none; opacity:.55; }
+  .search-box input{
+    flex:1; border:none; outline:none; background:transparent; color: var(--ink);
+    font-family:'Montserrat', sans-serif; font-size: 14.5px;
+  }
+  .search-box input::placeholder{ color: var(--ink-faint); }
+  .search-status{ margin-top: 10px; font-size: 12.5px; color: var(--ink-soft); min-height: 18px; }
+  .search-status b{ color: var(--ink); font-weight:600; }
+  .search-status .chip{
+    display:inline-flex; align-items:center; gap:6px; border:1px solid var(--accent-line);
+    background: var(--accent-soft); color: var(--ink); padding: 3px 10px 3px 4px; margin: 3px 6px 3px 0;
+    font-size:12px; font-weight:500; cursor:pointer; text-decoration:none; transition: background .15s ease;
+  }
+  .search-status .chip:hover{ background: rgba(91,132,172,0.28); }
+  .search-status .chip .badge{
+    font-size:9.5px; letter-spacing:.5px; text-transform:uppercase; color: var(--accent);
+    background: rgba(91,132,172,0.18); padding: 2px 6px;
+  }
+  .search-status .none{ color: var(--ink-faint); }
+
+  .section{ margin-top: 50px; }
+  .section.is-empty-search{ display:none; }
+  .section-head{ display:flex; align-items:baseline; justify-content:space-between; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 20px; }
+  .section-head h2{ font-weight:500; font-size: 16.5px; letter-spacing:.3px; margin:0; color: var(--ink); }
+  .section-count{ font-size: 11.5px; color: var(--ink-faint); }
+
+  .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; }
+
+  .card{
+    display:flex; align-items:flex-start; gap:14px;
+    border: 1px solid var(--line); background: var(--surface);
+    padding: 18px 18px; text-decoration:none; color:inherit;
+    transition: border-color .15s ease, background .15s ease, transform .15s ease;
+  }
+  .card:hover{ border-color: var(--accent-line); background: var(--surface-hover); transform: translateY(-1px); }
+  .card.hide{ display:none; }
+  .avatar{
+    flex:none; width:38px; height:38px; display:flex; align-items:center; justify-content:center;
+    background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
+    font-size:13px; font-weight:700; letter-spacing:.5px;
+  }
+  .card-body{ min-width:0; flex:1; }
+  .card-name{ font-size:14.5px; font-weight:600; color: var(--ink); margin:0 0 4px; }
+  .card-blurb{ font-size:12px; color: var(--ink-soft); margin:0 0 8px; line-height:1.5; }
+  .card-go{ font-size:11.5px; font-weight:600; color: var(--accent); display:inline-flex; align-items:center; gap:5px; }
+  .card-go .arrow{ transition: transform .15s ease; }
+  .card:hover .card-go .arrow{ transform: translateX(2px); }
+
+  .empty-card{
+    border: 1px dashed var(--line-strong); background: transparent;
+    padding: 22px 18px; color: var(--ink-faint); font-size:12.5px; line-height:1.6;
+  }
+  .empty-card b{ color: var(--ink-soft); display:block; font-size:13px; margin-bottom:4px; font-weight:600; }
+
+  .footnote{ margin-top: 60px; padding-top:18px; border-top:1px solid var(--line); font-size:12px; color: var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="site-header">
+    <a class="brand" href="./">
+      <span class="c">C-SUITE</span><span class="n">NETWORK</span><span class="tm">&trade;</span>
+    </a>
+  </header>
+
+  <div class="eyebrow">Marcela Payares</div>
+  <h1>Client Directory</h1>
+  <p class="sub">Every client workspace in one place. Search by name to jump straight to it, or browse by category below.</p>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input id="search" type="text" placeholder="Search clients, e.g. Goldstein" autocomplete="off">
+    </div>
+    <div id="search-status" class="search-status"></div>
+  </div>
+
+  <div id="sections"></div>
+
+  <div class="footnote">C-Suite Network &middot; internal directory maintained by Marcela Payares</div>
+</div>
+
+<script>
+  const CATEGORY_ORDER = ["Professional Services Clients", "Boards"];
+
+  const CLIENTS = [
+    {
+      name: "Goldstein Patent Law",
+      category: "Professional Services Clients",
+      url: "https://marcelapayarescsn.github.io/rich-goldstein/",
+      blurb: "Intellectual property law. Demo pages and content pipeline.",
+      initials: "GP"
+    }
+  ];
+
+  const sectionsEl = document.getElementById('sections');
+  const searchEl = document.getElementById('search');
+  const statusEl = document.getElementById('search-status');
+
+  function renderSections(){
+    sectionsEl.innerHTML = '';
+    CATEGORY_ORDER.forEach(category => {
+      const clients = CLIENTS.filter(c => c.category === category);
+
+      const section = document.createElement('div');
+      section.className = 'section';
+      section.dataset.category = category;
+
+      const head = document.createElement('div');
+      head.className = 'section-head';
+      head.innerHTML = `<h2>${category}</h2><span class="section-count">${clients.length} ${clients.length === 1 ? 'client' : 'clients'}</span>`;
+      section.appendChild(head);
+
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+
+      if(clients.length === 0){
+        const empty = document.createElement('div');
+        empty.className = 'empty-card';
+        empty.innerHTML = `<b>No clients here yet</b>They'll show up as soon as they're added.`;
+        grid.appendChild(empty);
+      } else {
+        clients.forEach(c => {
+          const card = document.createElement('a');
+          card.className = 'card';
+          card.href = c.url;
+          card.target = '_blank';
+          card.rel = 'noopener';
+          card.dataset.name = c.name.toLowerCase();
+          card.dataset.blurb = c.blurb.toLowerCase();
+          card.dataset.category = category;
+          card.innerHTML = `
+            <div class="avatar">${c.initials}</div>
+            <div class="card-body">
+              <p class="card-name">${c.name}</p>
+              <p class="card-blurb">${c.blurb}</p>
+              <span class="card-go">View <span class="arrow">&rarr;</span></span>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      section.appendChild(grid);
+      sectionsEl.appendChild(section);
+    });
+  }
+
+  function applySearch(){
+    const raw = searchEl.value.trim();
+    const q = raw.toLowerCase();
+    const allCards = Array.from(document.querySelectorAll('.card'));
+
+    if(q === ''){
+      allCards.forEach(c => c.classList.remove('hide'));
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('is-empty-search'));
+      statusEl.innerHTML = '';
+      return;
+    }
+
+    const matches = [];
+    allCards.forEach(c => {
+      const isMatch = c.dataset.name.includes(q) || c.dataset.blurb.includes(q);
+      c.classList.toggle('hide', !isMatch);
+      if(isMatch) matches.push(c);
+    });
+
+    document.querySelectorAll('.section').forEach(section => {
+      const visibleCards = section.querySelectorAll('.card:not(.hide)');
+      section.classList.toggle('is-empty-search', visibleCards.length === 0);
+    });
+
+    if(matches.length === 0){
+      statusEl.innerHTML = `<span class="none">No client found for &ldquo;${raw}&rdquo;.</span>`;
+    } else {
+      const chips = matches.map(c => {
+        const name = c.querySelector('.card-name').textContent;
+        return `<a class="chip" href="${c.href}" target="_blank" rel="noopener"><span class="badge">${c.dataset.category}</span>${name}</a>`;
+      }).join('');
+      statusEl.innerHTML = `<b>${matches.length} ${matches.length === 1 ? 'match' : 'matches'}.</b> ${chips}`;
+    }
+  }
+
+  searchEl.addEventListener('input', applySearch);
+  searchEl.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){
+      const visible = Array.from(document.querySelectorAll('.card:not(.hide)'));
+      if(visible.length === 1){
+        window.open(visible[0].href, '_blank', 'noopener');
+      }
+    }
+  });
+
+  renderSections();
+</script>
+</body>
+</html>
